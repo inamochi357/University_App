@@ -1,0 +1,61 @@
+{% load static %}
+
+<head>
+    <link rel="stylesheet" href="{% static '/css/pagination.css' %}">
+</head>
+<nav aria-label="Page navigation" class="navbar-fixed-bottom " >
+<ul class="pagination justify-content-center">
+  {% if page_obj.has_previous %}
+  <li class="page-item">
+    <a class="page-link" href="?page={{ page_obj.previous_page_number }}&科目名={{ request.GET.科目名 }}&担当者氏名={{ request.GET.担当者氏名 }}&全開講対象学科={{ request.GET.全開講対象学科 }}&年次={{ request.GET.年次 }}&講義学期={{ request.GET.講義学期 }}&必選区分={{ request.GET.必選区分 }}&講義id={{ request.GET.講義id }}&search=検索" aria-label="Previous">
+      <span aria-hidden="true">&lt;</span>
+    </a>
+  </li>
+  {% endif %}
+
+  {% if page_obj.number > 3 %}
+  <li class="page-item">
+    <a class="page-link" href="?page=1&科目名={{ request.GET.科目名 }}&担当者氏名={{ request.GET.担当者氏名 }}&全開講対象学科={{ request.GET.全開講対象学科 }}&年次={{ request.GET.年次 }}&講義学期={{ request.GET.講義学期 }}&必選区分={{ request.GET.必選区分 }}&講義id={{ request.GET.講義id }}&search=検索" aria-label="First">1</a>
+  </li>
+  {% endif %}
+
+  {% if page_obj.number > 4 %}
+  <li class="page-item"><span class="page-link" aria-hidden="true">...</span></li>
+  {% endif %}
+
+  {% for link_page in page_obj.paginator.page_range %}
+  {% if link_page == page_obj.number %}
+  <li class="page-item active">
+    <a class="page-link" href="?page={{ link_page }}&科目名={{ request.GET.科目名 }}&担当者氏名={{ request.GET.担当者氏名 }}&全開講対象学科={{ request.GET.全開講対象学科 }}&年次={{ request.GET.年次 }}&講義学期={{ request.GET.講義学期 }}&必選区分={{ request.GET.必選区分 }}&講義id={{ request.GET.講義id }}&search=検索">
+      {{ link_page }}
+    </a>
+  </li>
+  {% elif link_page < page_obj.number|add:3 and link_page > page_obj.number|add:-3 %}
+  <li class="page-item">
+    <a class="page-link" href="?page={{ link_page }}&科目名={{ request.GET.科目名 }}&担当者氏名={{ request.GET.担当者氏名 }}&全開講対象学科={{ request.GET.全開講対象学科 }}&年次={{ request.GET.年次 }}&講義学期={{ request.GET.講義学期 }}&必選区分={{ request.GET.必選区分 }}&講義id={{ request.GET.講義id }}&search=検索">
+      {{ link_page }}
+    </a>
+  </li>
+  {% endif %}
+  {% endfor %}
+
+  {% if page_obj.number < page_obj.paginator.num_pages|add:-3 %}
+  <li class="page-item"><span class="page-link" aria-hidden="true">...</span></li>
+  {% endif %}
+
+  {% if page_obj.number < page_obj.paginator.num_pages|add:-2 %}
+  <li class="page-item">
+    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&科目名={{ request.GET.科目名 }}&担当者氏名={{ request.GET.担当者氏名 }}&全開講対象学科={{ request.GET.全開講対象学科 }}&年次={{ request.GET.年次 }}&講義学期={{ request.GET.講義学期 }}&必選区分={{ request.GET.必選区分 }}&講義id={{ request.GET.講義id }}&search=検索" aria-label="Last">{{ page_obj.paginator.num_pages}}</a>
+  </li>
+  {% endif%}
+
+  {% if page_obj.has_next %}
+  <li class="page-item">
+    <a class="page-link" href="?page={{page_obj.next_page_number }}&科目名={{ request.GET.科目名 }}&担当者氏名={{ request.GET.担当者氏名 }}&全開講対象学科={{ request.GET.全開講対象学科 }}&年次={{ request.GET.年次 }}&講義学期={{ request.GET.講義学期 }}&必選区分={{ request.GET.必選区分 }}&講義id={{ request.GET.講義id }}&search=検索" aria-label="Next">
+      <span aria-hidden="true">&gt;</span>
+    </a>
+  </li>
+  {% endif %}
+</ul>
+</nav>
+

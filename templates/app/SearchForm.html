@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+{% load widget_tweaks %}
+
+<head>
+    <title>検索画面</title>
+</head>
+
+<body>
+ <header>
+    <nav class="navbar">
+        <div class="d-flex">
+            <h1>いつかはハタチ</h1>
+        </div>
+        <div class="d-flex flex-column">
+            <a href="{% url 'top-page' %}">トップページはこちら</a>
+            {% if user.is_authenticated %}
+            <p>ログイン中です</p>
+            <a href="{% url 'logout' %}" class="link-secondary">ログアウトはこちら</a>
+            <a href="{% url 'Settings' %}" class="link-secondary">設定はこちら</a>
+            {% else %}
+            <p>ログインしていません</p>
+            <a href="{% url 'registration' %}" class="link-secondary">新規登録はこちら</a>
+            <a href="{% url 'login' %}" class="link-secondary">ログインはこちら</a>
+            {% endif %}
+        </div>
+    </nav>
+ </header>
+    <form action="" method="get" name="search">
+        <div class="form-group">
+            {{ search_form }}
+            <input type="submit" name="search" value="検索">
+        </div>
+    </form>
+ <div class="m-10">
+     <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>講義コード</th>
+                <th>科目名</th>
+                <th>担当者氏名</th>
+                <th>全開講対象学科</th>
+            </tr>
+            {% for object in object_list %}
+            <tr>
+                <td>{{ object.講義id }}</td>
+                <td><a href="/database/{{object.講義id}}"> {{ object.科目名 }}</a></td>
+                <td>{{ object.担当者氏名 }}</td>
+                <td>{{ object.全開講対象学科 }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+     </div>
+ </div>
+ <div>
+     {% include "app/snippets/pagination.html" %}
+ </div>
+
+</body>
+{% endblock %}

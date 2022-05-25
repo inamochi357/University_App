@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+    <title>いつかはハタチ|レビュー</title>
+    <link rel="stylesheet" href="{% static '/css/10style.css' %}">
+</head>
+{% include 'app/snippets/header.html' %}
+<body>
+    <div class="review text-break">
+      <div class="minnnanoreview">
+            <div class="d-flex flex-column text-left">
+                <h4>{{user.0}}さんのレビュー</h4>
+                <p>充実度 <span class="star5_rating" data-rate="{{object.fullnessRating}}"></span> 星{{object.fullnessRating}}</p>
+                <p>楽単度 <span class="star5_rating" data-rate="{{object.EasyRating}}"></span> 星{{object.EasyRating}}</p>
+                <p> 作成日{{object.created_at}}</p>
+                <p>{{object.text}}</p>
+            </div>
+      </div>
+    </div>
+</body>
+{% endblock %}

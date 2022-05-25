@@ -1,0 +1,22 @@
+.like-btn {
+ width: 25px;
+ height: 30px;
+ font-size: 25px;
+ color: #808080;
+ margin-left: 20px;
+ }
+
+.unlike-btn {
+ width: 25px;
+ height: 30px;
+ font-size: 25px;
+ color: #e54747;
+ margin-left: 20px;
+ }
+
+##⑥いいねの数をビューに表示する
+投稿一覧ページに表示する
+countメソッドを使いいいねの数を引っ張ってきます。
+
+```/views/topics/index.html.erb
+<%= topic.like_users.count %>

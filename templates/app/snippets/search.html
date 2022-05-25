@@ -1,0 +1,5 @@
+{% load static %}
+<form class="form-inline mx-2" action="{% url 'search' %}" method="get">
+    <input class="form-control mr-sm-2" type="text" placeholder="講義名" aria-label="Search" name="科目名">
+    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit" name="search" value="検索">検索</button>
+</form>

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+
+<head>
+    <title>設定</title>
+    <link rel="stylesheet" href="{% static '4style.css' %}">
+</head>
+<body>
+    {% include 'app/snippets/header.html' %}
+    <div class="text-center mt-4">
+        <a href="{% url 'top-page' %}" class="link-secondary">　トップページはこちら</a>
+        <a href="{% url 'Username' %}" class="link-secondary">　ユーザーネームの設定はこちら</a>
+        <a href="{% url 'Email' %}" class="link-secondary">　メールアドレスの設定はこちら</a>
+        <a href="{% url 'ProfileChange' %}" class="link-secondary">　プロフィールの設定はこちら</a>
+        <a href=../Profile/{{username}} class="link-secondary">プロフィールを見る　</a>
+    </div>
+</body>
+{% endblock %}

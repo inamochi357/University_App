@@ -1,0 +1,35 @@
+.btnremo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  border: 2px solid #b4b1a0;
+  color: #4c4833;
+  width: 300px;
+  height: 80px;
+  box-sizing: border-box;
+  text-decoration: none;
+  transition-duration: 0.3s;
+}
+.btn:hover {
+  background: #b4b1a0;
+  color: #ffffff;
+}
+.remodal {
+  position: relative;
+  padding: 25px;
+}
+.remodal img {
+  width: 100%;
+  height: auto;
+  vertical-align: top;
+}
+.remodal-cancel {
+  color: #fff;
+  background: #000000;
+  width: 100%;
+  margin-top: 25px;
+}
+.remodal-cancel:hover {
+  background: #333;
+}

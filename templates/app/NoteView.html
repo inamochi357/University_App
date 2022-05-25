@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+{% load boost %}
+{% include 'app/snippets/header.html' %}
+<head>
+    <title>いつかはハタチ|ノート共有</title>
+    <link rel="stylesheet" href="{% static '/css/9style.css' %}">
+    <link rel="stylesheet" href="{% static '/css/modal.css' %}">
+    <link rel="stylesheet" href="{% static 'css/modaal.css' %}" type="text/css">
+    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/modaal.js' %}"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <ul class="navbar justify-content-center">
+        <li class="has-sub mx-3">
+          <a href="../">講義概要</a>
+        </li>
+        <li class="has-sub mx-3">
+          <a href="">ノート共有</a>
+        </li>
+        <li class="has-sub mx-3">
+          <a href="../Review">レビュー</a>
+        </li>
+    </ul>
+</div>
+<div class="d-flex align-items-center justify-content-center my-4">
+    <a role="button" href="./Post" class="btn btn-outline-primary btn-lg">ノートを投稿する</a>
+</div>
+<div class="container my-4 ml-4">
+    <div class="row">{% for target in target_time %}<p> 第{{ target }}回、</p> {% endfor %} </div>
+    <form id="chk" method="get" name="chk" class="row">
+        <div class="input-group-prepend">
+        {% for i in 16|range %}
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="checks[]" value="{{i|add:'1'}}" />
+                <label class="form-check-label" for="inlineCheckbox{{i|add:'1'}}">
+                {{i|add:"1"}}
+                </label>
+            </div>
+
+        {% endfor %}
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" name="checks[]" value="16" />
+                <label class="form-check-label" for="inlineCheckbox16">
+                その他
+                </label>
+            </div>
+
+            <input type="submit" id="button" class="btn btn-outline-secondary" name="button" value="絞り込み">
+        </div>
+    </form>
+</div>
+<div class="container-md">
+    <div class="card-deck m-4">
+        <div class="row">
+    {% for note_list in object_lists %}
+            <div class="col-md-4">
+                <div class="card h-100" style="width: 18rem;">
+                    <a class="btn gallery" href="https://{{ S3 }}/image/{{note_list.image}}"><img class="card-img-top" src="https://{{ S3 }}/image/{{note_list.image}}" style="cursor:pointer"/></a>
+                    <script type="text/javascript">
+                        $('.gallery').modaal({
+                            type: 'image'
+                        });
+                    </script>
+                    <div class="card-body">
+                        <a href="/Profile/{{note_list.username.0}}"><h5 class="card-title">{{note_list.nickname.0}}</h5></a>
+                        <p class="card-text">{{note_list.created_at}}</p>
+                        <p class="card-text">第{{note_list.target_time}}回ノート</p>
+                        <p class="card-text">{{note_list.text}}</p>
+                        <p class="card-text">いいね数: {{note_list.count}}</p>
+                        {% if user.is_authenticated %}
+                        {% if note_list.Like %}
+                        <form method="POST" class="d-inline">
+                            {% csrf_token %}
+                          <input type="hidden" name="target_note" value="{{note_list.id}}">
+                          <button type="submit" class="btn btn-sm btn-outline-danger">いいね
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                            </svg>
+                          </button>
+                        </form>
+                        {% else %}
+                        <form method="POST" class="d-inline">
+                            {% csrf_token %}
+                          <input type="hidden" name="target_note" value="{{note_list.id}}">
+                          <button type="submit" class="btn btn-sm btn-outline-danger">いいね
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+                              <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                            </svg>
+                          </button>
+                        </form>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="a{{note_list.id}}" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <img src="https://{{ S3 }}/image/{{note_list.image}}" width="1920" height="1440" class="aligncenter size-full wp-image-425"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    {% endfor %}
+        </div>
+    </div>
+</div>
+</body>
+
+{% endblock %}
+

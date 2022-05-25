@@ -1,0 +1,32 @@
+    .profile {
+        background: #FFF;
+        width: 300px;
+        padding: 2rem;
+        margin:auto;
+        position:relative;
+        top:90px;
+      }
+
+      .profile__img {
+        display: block;
+        width: 160px;
+        height: 160px;
+        border-radius:50%;
+        margin: 0 auto;
+      }
+
+      .profile__name {
+        text-align:center;
+        font-weight:bold;
+        font-size:1.2rem;
+        margin: 1rem auto 1rem;
+        letter-spacing:.1rem;
+      }
+
+      .profile__desc {
+        line-height:1.6rem;
+      }
+
+      .profile h1{
+          text-align: center;
+      }

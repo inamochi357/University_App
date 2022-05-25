@@ -1,0 +1,20 @@
+ <header>
+    <nav class="navbar">
+        <div class="d-flex">
+            <h1>いつかはハタチ</h1>
+            {% include 'app/snippets/search.html' %}
+        </div>
+        <div class="d-flex flex-column">
+            <a href="{% url 'top-page' %}">トップページはこちら</a>
+            {% if request.user.is_anonymous %}
+                <p>ログインしていません</p>
+                <a href="{% url 'registration' %}" class="link-secondary">新規登録はこちら</a>
+                <a href="{% url 'login' %}" class="link-secondary">ログインはこちら</a>
+            {% else %}
+                <p>ログイン中です</p>
+                <a href="{% url 'logout' %}" class="link-secondary">ログアウトはこちら</a>
+                <a href="{% url 'Settings' %}" class="link-secondary">設定はこちら</a>
+            {% endif %}
+        </div>
+    </nav>
+ </header>

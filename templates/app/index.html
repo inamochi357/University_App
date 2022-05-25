@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+{% load boost %}
+<head>
+    <link rel="stylesheet" href="{% static '/css/indexstyle.css' %}">
+    <title>サイト</title>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-left">
+                <h1>いつかはハタチ</h1>
+            </div>
+        </div>
+        <div class="header-right">
+            <div>
+                {% if request.user.is_anonymous %}
+                    ログインしていません
+                {% else %}
+                    ログイン中です
+                {% endif %}
+            </div>
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="link-secondary">ログアウトはこちら</a>
+                <a href="{% url 'Settings' %}" class="link-secondary">設定はこちら</a>
+            {% else %}
+                <a href="{% url 'registration' %}" class="link-secondary">新規登録はこちら</a>
+                <a href="{% url 'login' %}" class="link-secondary">ログインはこちら</a>
+            {% endif %}
+        </div>
+    </header>
+    <div class="first-haikei">
+        <div class="first-toka">
+            <nav class="navbar-nav ml-auto mr-auto">
+                <form class="form-inline" action="{% url 'search' %}" method="get">
+                    <input class="form-control mr-sm-2" type="text" placeholder="講義名" aria-label="Search" name="科目名">
+                    <button class="btn btn-outline-primary my-2 my-sm-0" type="submit" name="search" value="検索">検索</button>
+                </form>
+            </nav>
+        </div>
+    </div>
+　  <div class="second-rank">
+        <h2>👑みんなのお気に入り講義👑</h2>
+        <div class="card-deck">
+            {% for RankInfo, Rank in RankingInfo|zip:ranking %}
+              <div class="card" style="width: 18rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">{{RankInfo.科目名}}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{RankInfo.担当者氏名}}</h6>
+                    <p class="card-text"><small class="text-muted">{{RankInfo.全開講対象学科}}</small></p>
+                    <p class="card-text"><small class="text-muted">登録数 {{Rank.count}}</small></p>
+                    <a href="/database/{{RankInfo.講義id}}" class="card-link">link</a>
+                  </div>
+              </div>
+            {% endfor %}
+        </div>
+    </div>
+        {% if user.is_authenticated %}
+    <div class="second-rank">
+        <h2>📖あなたのお気に入り講義📖</h2>
+        <div class="card-deck">
+            {% for class in obj %}
+                <div class="card" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{class.科目名}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{class.担当者氏名}}</h6>
+                        <p class="card-text"><small class="text-muted">{{class.全開講対象学科}}</small></p>
+                        <a href="/database/{{class.講義id}}" class="card-link">link</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</body>
+
+{% endblock %}

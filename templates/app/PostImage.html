@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+{% include 'app/snippets/header.html' %}
+<body>
+<div class="container">
+    <div class="justify-content-center mx-auto mt-5">
+        <form action="" method="POST" id="comment-form" enctype="multipart/form-data">
+                {% csrf_token %}
+            <div class="form-group mx-2 my-3 row">
+                <label for="{{form.text.id_for_label}}" class="col-sm-1 col-form-label">本文</label>
+                <div class="row col-sm-10">
+                    <textarea name="{{form.text.name}}"  id="{{form.text.id_for_label}}" class="form-control"> </textarea>
+                </div>
+            </div>
+            <div class="form-group mx-3 my-3 row ">
+                <label for="{{form.image.id_for_label}}" class="mr-5">ノート</label>
+                <div class="row">{{form.image}}</div>
+            </div>
+            <div class="form-group mx-3 my-3 row ">
+                <label for="{{form.target_time.id_for_label}}" class="mr-5">{{form.target_time.label}}</label>
+                <div class="row">{{form.target_time}}</div>
+            </div>
+            <div class="offset-md-1">
+                <button type="submit" class="col-sm-2 btn btn-outline-primary">投稿する</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+{% endblock %}

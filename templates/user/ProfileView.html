@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+<head>
+    <title>いつかはハタチ|プロフィール</title>
+    <link rel="stylesheet" href="{% static '/css/ProfileView.css' %}">
+</head>
+<body>
+    {% include 'app/snippets/header.html' %}
+    <div class="flex-column text-center profile">
+        <h2>プロフィール</h2>
+        <img class="profile__img" src="https://{{ S3 }}/image/{{ object_list.image }}">
+        <h2>自己紹介</h2>
+        <div class="profile__introduction"> <p>{{object_list.introduction}} </p> </div>
+        <div class="profile__id">ID: {{object_list.username}}</div>
+        <div class="profile__nickname">ニックネーム: {{object_list.nickname}}</div>
+        <div class="profile__grade">学年: {{object_list.grade}}年</div>
+        <div class="profile__department">学部学科: {{DEPARTMENT}}</div>
+        <div class="profile__date_joined">誕生日: {{object_list.date_of_birth}}</div>
+        <div class="profile__link">link: <a href="{{object_list.url}}">{{object_list.url}}</a></div>
+        {% if user == True %}
+        <a href="{% url 'ProfileChange' %}" class="btn btn-outline-primary btn-lg btn-block" tabindex="-1" role="button" aria-disabled="true">プロフィールを編集</a>
+        {% endif %}
+    </div>
+</body>
+{% endblock %}

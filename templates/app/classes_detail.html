@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+{% load boost %}
+<head>
+    <title>{{ Class.科目名 }}</title>
+    <link rel="stylesheet" href="{% static '/css/7style.css' %}">
+</head>
+
+<body>
+{% include 'app/snippets/header.html' %}
+    <div class="container">
+        <div class="container-fluid">
+            <ul class="navbar justify-content-center">
+                <li class="has-sub mx-3">
+                  <a href="">講義概要</a>
+                </li>
+                <li class="has-sub mx-3">
+                  <a href="./Note">ノート共有</a>
+                </li>
+                <li class="has-sub mx-3">
+                  <a href="./Review">レビュー</a>
+                </li>
+            </ul>
+        </div>
+        <div class="d-flex justify-content-start ml-5 mt-5">
+            {% if user.is_authenticated %}
+            {% if like  %}
+            <form method="POST" class="d-inline">
+              {% csrf_token %}
+              <input type="hidden" name="ClassID" value="{{Review_list.ClassID_id}}">
+              <button type="submit" class="btn btn-sm btn-outline-warning">登録を外す
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lightning-fill" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z"/>
+                  </svg>
+                </button>
+            </form>
+
+                {% else %}
+            <form method="POST" class="d-inline">
+              {% csrf_token %}
+              <input type="hidden" name="ClassID" value="{{Review_list.ClassID_id}}">
+              <button type="submit" class="btn btn-sm btn-outline-warning">登録する
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lightning-fill" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z"/>
+                  </svg>
+                </button>
+            </form>
+            {% endif %}
+        {% endif %}
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <div>
+                    {% for columne, ClassDetail in columnes|zip:ClassDetailes %}
+                    {% if columne == "url" %}
+                    <tr>
+                        <td>{{columne}}</td>
+                        <td><a href="{{ClassDetail}}">{{ClassDetail}}</a></td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td>{{columne}}</td>
+                        <td>{{ClassDetail}}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </table>
+        </div>
+    </div>
+</body>
+{% endblock %}
+
