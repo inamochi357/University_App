@@ -2,10 +2,7 @@ from .models import Post_Note, LikeNote, Classes, Review, LikeReview
 from django import forms
 
 
-
-
-
-class PostNoteForm(forms.ModelForm):
+class PostNoteForm(forms.ModelForm):    #ノートを投稿するフォーム
     class Meta:
         model = Post_Note
         exclude = ('created_at', 'target', "User", "count")
@@ -20,7 +17,8 @@ class PostNoteForm(forms.ModelForm):
     image = forms.ImageField()
     target_time = forms.ChoiceField(widget=forms.widgets.Select, choices=CHOICES_TIME, required=False, label="講義回")
 
-class PostReviewForm(forms.ModelForm):
+
+class PostReviewForm(forms.ModelForm):  #レビューを投稿するフォーム
     class Meta:
         model = Review
         exclude = ('created_at', 'ClassID', "UserId", "count")
@@ -28,17 +26,18 @@ class PostReviewForm(forms.ModelForm):
     text = forms.CharField(label="本文", required=False)
     test = forms.CharField(label="テスト")
     attendance = forms.CharField(label="出席", required=False)
-    EasyRating = forms.ChoiceField(label="楽単度", choices=((5,"5"), (4,"4"), (3,"3"), (2,"2"), (1,"1")))
-    fullnessRating = forms.ChoiceField(label="充実度", choices=((5,"5"), (4,"4"), (3,"3"), (2,"2"), (1,"1")))
+    EasyRating = forms.ChoiceField(label="楽単度", choices=((5,"5"), (4,"4"), (3,"3"), (2,"2"), (1,"1")))      #5段階評価を行う
+    fullnessRating = forms.ChoiceField(label="充実度", choices=((5,"5"), (4,"4"), (3,"3"), (2,"2"), (1,"1")))  #5段階評価を行う
 
 
-class SearchForm(forms.Form):
+class SearchForm(forms.Form):   #検索フォーム
+    #開講対象学科を取得する、しかし複数の学科を対象としている場合「理工学部数学科理工学部情報工学科」のように連続して保存されているためデータの加工を行う
     def CHOICE_DEPARTMENT():
-        departments_query_set = Classes.objects.values("全開講対象学科").distinct().order_by("全開講対象学科")
+        departments_query_set = Classes.objects.values("全開講対象学科").distinct().order_by("全開講対象学科")    #開講対象学科を取得
         department_list = list(departments_query_set)
         department_tuple_list = [(None, None)]
         for department in department_list:
-            if department["全開講対象学科"] == None:
+            if department["全開講対象学科"] == None:   #Noneはパス
                 pass
             else:
                 department[department["全開講対象学科"]] = department["全開講対象学科"]
@@ -51,7 +50,7 @@ class SearchForm(forms.Form):
                 elif department_tuple[0] == "理工学部数学科農学部生物資源学科":
                     pass
 
-                elif len(department_tuple[0]) <= 15:
+                elif len(department_tuple[0]) <= 15:    #15文字以下のみをタプルに追加する。
                     department_tuple = tuple(department.values())
                     department_tuple = department_tuple + department_tuple
                     department_tuple_list.append(department_tuple)
@@ -63,6 +62,8 @@ class SearchForm(forms.Form):
         model = Classes
         exclude = ("備考", "学期_曜日_時限", "単位数", "クラス", "url", "部門", "対象研究科_専攻")
     CHOICE_DEPARTMENT = CHOICE_DEPARTMENT()
+
+    #学年
     CHOICE_GRADE = (
             (None, "None"),
             ("１年次", "1年次"),
@@ -72,6 +73,7 @@ class SearchForm(forms.Form):
             ("５年次", "5年次"),
             ("６年次", "6年次"),
     )
+    #学期
     CHOICE_TERM = (
             (None, "None"),
             ("前期", "前期"),
@@ -81,6 +83,7 @@ class SearchForm(forms.Form):
             ("通年", "通年"),
             ("集中", "集中"),
     )
+    #必選区分
     CHOICE_CLASSE = (
         (None, "None"),
         ("選択科目", "選択科目"),

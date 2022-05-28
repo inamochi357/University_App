@@ -1,10 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
-from django.core.validators import MinLengthValidator, RegexValidator, MaxValueValidator, MinValueValidator
+from django.core.validators import MinLengthValidator, RegexValidator
 from django.utils import timezone
 
 
-class AccountManager(BaseUserManager):
+class AccountManager(BaseUserManager):  #BaseUserManagerを継承してカスタムユーザーを作成
 
     def create_user(self, username, email, password=None):
         if not email:
@@ -17,7 +17,7 @@ class AccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, password=None):
+    def create_superuser(self, username, email, password=None): #管理者権限を持ったユーザーを作成
         user = self.create_user(
             username=username,
             email=self.normalize_email(email),
@@ -29,8 +29,8 @@ class AccountManager(BaseUserManager):
         return user
 
 
-class MyUser(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(verbose_name='username', max_length=10, unique=True, validators=[MinLengthValidator(5,), RegexValidator(r'^[a-zA-Z0-9]*$',)])
+class MyUser(AbstractBaseUser, PermissionsMixin):   #ユーザーの定義
+    username = models.CharField(verbose_name='username', max_length=10, unique=True, validators=[MinLengthValidator(5,), RegexValidator(r'^[a-zA-Z0-9]*$',)])   #バリデーションを行う
     email = models.EmailField(verbose_name='Email', max_length=50, unique=True)
     nickname = models.CharField(verbose_name='ニックネーム', max_length=10, blank=False, null=False)
     grade = models.IntegerField(verbose_name="学年", blank=True, null=True)
@@ -45,11 +45,8 @@ class MyUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
 
-    #AbstractBaseUserにはMyUserManagerが必要
     objects = AccountManager()
-    #一意の識別子として使用されます
     USERNAME_FIELD = 'email'
-    #ユーザーを作成するときにプロンプ​​トに表示されるフィールド名のリストです。
     REQUIRED_FIELDS = ['username']
 
     def __str__(self):

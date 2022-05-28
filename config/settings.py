@@ -57,17 +57,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ['POSTGRESQL_NAME'],
-        'USER': os.environ['POSTGRESQL_USER'],
-        'PASSWORD': os.environ['POSTGRESQL_PASSWORD'],
-        'HOST': os.environ['POSTGRESQL_HOST'],
-        'PORT': os.environ['POSTGRESQL_PORT'],
-    }
-}
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -119,17 +108,19 @@ DEBUG_PROPAGATE_EXCEPTIONS = True
 
 
 try:
-    from .local_settings import *
-except ImportError:
+    from .local_settings import *   #ローカル環境の場合ローカルの設定を読み込む
+
+except ImportError:                 #エラーの場合pass
     pass
 
-if not DEBUG:
+if not DEBUG:   #本番用の設定
     print("Not Debug Mode!!")
 
     SECRET_KEY = os.getenv('SECRET_KEY', 'Optional default value')
     import django_heroku
     django_heroku.settings(locals(), staticfiles=False)
 
+    #S3用の設定
     AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
     AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
     AWS_STORAGE_BUCKET_NAME = os.environ['AWS_STORAGE_BUCKET_NAME']
@@ -137,6 +128,18 @@ if not DEBUG:
     AWS_S3_REGION_NAME = "ap-northeast-1"
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
+    }
+
+    #データベースの設定
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ['POSTGRESQL_NAME'],
+            'USER': os.environ['POSTGRESQL_USER'],
+            'PASSWORD': os.environ['POSTGRESQL_PASSWORD'],
+            'HOST': os.environ['POSTGRESQL_HOST'],
+            'PORT': os.environ['POSTGRESQL_PORT'],
+        }
     }
 
     STATIC_ROOT = os.path.join(BASE_DIR, 'static')

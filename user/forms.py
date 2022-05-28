@@ -17,7 +17,7 @@ class AccountForm(forms.ModelForm):
 
 
 class CustomProfileChangeForm(forms.ModelForm):
-    #後で情報足すためのフォーム
+    #後で情報を変更するためのフォーム
     class Meta:
         model = MyUser
         fields = ("nickname", "date_of_birth", "image", "url", "introduction")
@@ -29,6 +29,7 @@ class CustomProfileChangeForm(forms.ModelForm):
         }
 
     def __init__(self, nickname=None, grade=None, department=None, date_of_birth=None, image=None, url=None, introduction=None, *args, **kwargs):
+        #学年を選択
         CHOICES_GRADE = (
             ("学部生", (
                 ("1", "1年生"),
@@ -44,6 +45,7 @@ class CustomProfileChangeForm(forms.ModelForm):
             ))
         )
 
+        #学部学科を選択
         CHOICES_DEPARTMENT = (
             ("法学部", (
                 ("00", "法学科"),
@@ -81,6 +83,7 @@ class CustomProfileChangeForm(forms.ModelForm):
         self.fields['image'] = forms.ImageField(required=False)
         self.fields['introduction'] = forms.CharField(widget=forms.Textarea, initial=introduction, label="自己紹介", required=False)
 
+    #フォームに入力された情報でユーザー情報をアップデート
     def update(self, user):
         user.nickname = self.cleaned_data['nickname']
         user.grade = self.cleaned_data['grade']
@@ -91,6 +94,7 @@ class CustomProfileChangeForm(forms.ModelForm):
         user.introduction = self.cleaned_data['introduction']
         user.save()
 
+    #画像がフォームに追加されなかった際のupdate関数
     def update_exclude_image(self, user):
         user.nickname = self.cleaned_data['nickname']
         user.grade = self.cleaned_data['grade']
@@ -112,9 +116,9 @@ class CustomEmailChangeForm(forms.ModelForm):
         kwargs.setdefault('label_suffix', '')
         super().__init__(*args, **kwargs)
 
-        self.fields['email'].widget.attrs['value'] = email
+        self.fields['email'].widget.attrs['value'] = email  #登録済みの変更前のメールアドレスを予め入力しておく
 
-    def update(self, user):
+    def update(self, user): #Emailをアップデート
         user.email = self.cleaned_data['email']
         user.save()
 
@@ -130,14 +134,13 @@ class CustomUsernameChangeForm(forms.ModelForm):
         kwargs.setdefault('label_suffix', '')
         super().__init__(*args, **kwargs)
 
-        self.fields['username'].widget.attrs['value'] = username
+        self.fields['username'].widget.attrs['value'] = username    #登録済みの変更前のusernameを予め入力しておく
 
     def update(self, user):
-        user.username = self.cleaned_data['username']
+        user.username = self.cleaned_data['username']   #usernameをアップデート
         user.save()
 
 
-
-class LoginForm(AuthenticationForm):
+class LoginForm(AuthenticationForm):    #ログインフォーム
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
