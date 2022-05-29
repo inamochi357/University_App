@@ -11,10 +11,12 @@ from django.db.models import Q
 
 def index(request): #メインページ
     context = {}
-    ranking = ClassesAdditionFunction.objects.order_by('count')[:5] #5位までのランキングをClassesAdditionFunctionから取得
+    ranking = ClassesAdditionFunction.objects.order_by('-count')[:5] #5位までのランキングをClassesAdditionFunctionから取得
     context["ranking"] = ranking
-    ClassID = ranking.values("ClassID_id")   #上で取得したランキングからクラスのIDを取得
-    RankingInfo = Classes.objects.filter(pk__in=ClassID) #ランキングに乗った授業の情報を取得
+    ClassesID = ranking.values("ClassID_id")   #上で取得したランキングからクラスのIDを取得
+    RankingInfo = []
+    for ClassID in ClassesID:
+        RankingInfo.append(Classes.objects.filter(pk=ClassID['ClassID_id']).values()) #ランキングに乗った授業の情報を取得
     context["RankingInfo"] = RankingInfo
     if request.user.is_authenticated:   #ログイン済みの時の処理
         ClassID = list(FavoriteClass.objects.values_list('ClassID', flat=True).filter(UserId=request.user)) #自分の登録しているクラスIDをリストで取得
